@@ -1,0 +1,9 @@
+export const NEXT_PUBLIC_SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com";
+export const NEXT_PUBLIC_SOLANA_NETWORK = process.env.NEXT_PUBLIC_SOLANA_NETWORK || "devnet";
+export const NEXT_PUBLIC_PALMSHIELD_PROGRAM_ID = process.env.NEXT_PUBLIC_PALMSHIELD_PROGRAM_ID || "<your_program_id>";
+export const NEXT_PUBLIC_PUSD_TOKEN_ADDRESS = process.env.NEXT_PUBLIC_PUSD_TOKEN_ADDRESS || "<pusd_spl_token_address>";
+export const NEXT_PUBLIC_PLATFORM_FEE_PERCENT = parseFloat(process.env.NEXT_PUBLIC_PLATFORM_FEE_PERCENT || "0.5");
+export const NEXT_PUBLIC_PLATFORM_WALLET = process.env.NEXT_PUBLIC_PLATFORM_WALLET || "<platform_fee_wallet>";
+export const NEXT_PUBLIC_AUTO_RELEASE_DAYS = parseInt(process.env.NEXT_PUBLIC_AUTO_RELEASE_DAYS || "7", 10);
+export const NEXT_PUBLIC_ARBITRATOR_MIN_STAKE = parseFloat(process.env.NEXT_PUBLIC_ARBITRATOR_MIN_STAKE || "50");
+export const NEXT_PUBLIC_VOTING_WINDOW_HOURS = parseInt(process.env.NEXT_PUBLIC_VOTING_WINDOW_HOURS || "48", 10);

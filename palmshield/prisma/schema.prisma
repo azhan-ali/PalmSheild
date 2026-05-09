@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id                String      @id @default(cuid())
+  title             String
+  description       String
+  clientWallet      String
+  freelancerWallet  String?
+  totalBudget       Float                         // in PUSD
+  platformFee       Float                         // 0.5% of totalBudget
+  contractAddress   String?                       // Solana PDA address
+  escrowTxSignature String?
+  status            ProjectStatus @default(OPEN)
+  category          String
+  deadline          DateTime
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  milestones        Milestone[]
+  dispute           Dispute?
+  nfts              ReputationNFT[]
+}
+
+enum ProjectStatus {
+  OPEN          // Created, PUSD locked, no freelancer yet
+  ACTIVE        // Freelancer accepted, work in progress
+  COMPLETED     // All milestones done
+  DISPUTED      // Dispute raised
+  CANCELLED     // Cancelled by client (before acceptance)
+}
+
+model Milestone {
+  id              String          @id @default(cuid())
+  projectId       String
+  project         Project         @relation(fields: [projectId], references: [id])
+  title           String
+  description     String
+  amount          Float           // PUSD amount
+  order           Int             // Milestone sequence number
+  status          MilestoneStatus @default(PENDING)
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  autoReleaseAt   DateTime?       // 7 days after submission
+  submissionNote  String?
+  rejectionReason String?
+  txSignature     String?         // Release transaction signature
+  createdAt       DateTime        @default(now())
+}
+
+enum MilestoneStatus {
+  PENDING       // Not started
+  IN_PROGRESS   // Freelancer working
+  SUBMITTED     // Freelancer submitted, awaiting client review
+  APPROVED      // Client approved, PUSD released
+  REJECTED      // Client rejected, revision needed
+  AUTO_RELEASED // Auto-released after 7 day timeout
+  DISPUTED      // Under dispute
+}
+
+model Dispute {
+  id              String        @id @default(cuid())
+  projectId       String        @unique
+  project         Project       @relation(fields: [projectId], references: [id])
+  milestoneId     String
+  raisedBy        String        // wallet address
+  raisedAgainst   String        // wallet address
+  reason          String
+  clientEvidence  String?       // IPFS CID
+  freelancerEvidence String?    // IPFS CID
+  status          DisputeStatus @default(OPEN)
+  result          String?       // "CLIENT_WIN" | "FREELANCER_WIN"
+  resolvedAt      DateTime?
+  votingDeadline  DateTime
+  createdAt       DateTime      @default(now())
+  votes           ArbitratorVote[]
+}
+
+enum DisputeStatus {
+  OPEN          // Dispute raised, evidence being collected
+  VOTING        // Arbitrators voting
+  RESOLVED      // Decision made, payout done
+}
+
+model ArbitratorVote {
+  id              String    @id @default(cuid())
+  disputeId       String
+  dispute         Dispute   @relation(fields: [disputeId], references: [id])
+  arbitratorWallet String
+  vote            String    // "CLIENT" | "FREELANCER"
+  reason          String?
+  stakeAmount     Float     // PUSD staked
+  rewarded        Boolean   @default(false)
+  slashed         Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+}
+
+model ReputationNFT {
+  id            String    @id @default(cuid())
+  wallet        String    // NFT owner (freelancer or client)
+  mintAddress   String    // Solana NFT mint address
+  projectId     String
+  project       Project   @relation(fields: [projectId], references: [id])
+  type          String    // "FREELANCER_MILESTONE" | "CLIENT_TRUSTED"
+  milestoneTitle String?
+  amountPUSD    Float
+  rating        Int       // 1–5 stars
+  txSignature   String
+  createdAt     DateTime  @default(now())
+}
+
+model Arbitrator {
+  id            String    @id @default(cuid())
+  wallet        String    @unique
+  stakedAmount  Float     // PUSD staked to become arbitrator
+  totalVotes    Int       @default(0)
+  correctVotes  Int       @default(0)
+  reputation    Float     @default(0)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+}
