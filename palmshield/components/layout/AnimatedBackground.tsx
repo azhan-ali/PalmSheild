@@ -19,197 +19,199 @@ export function AnimatedBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none bg-[#030407] overflow-hidden">
+    <div className="fixed inset-0 z-0 pointer-events-none bg-[#030408] overflow-hidden">
       
-      {/* 0. Organic Aurora Mesh (NEW) */}
+      {/* 0. Slow Aurora Nebula */}
       <motion.div 
-        className="absolute inset-0 opacity-40 mix-blend-screen"
+        className="absolute inset-0 opacity-30"
         animate={{
           background: [
-            "radial-gradient(circle at 20% 30%, rgba(107,60,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(0,200,150,0.1) 0%, transparent 50%)",
-            "radial-gradient(circle at 80% 30%, rgba(107,60,255,0.1) 0%, transparent 50%), radial-gradient(circle at 20% 70%, rgba(0,200,150,0.15) 0%, transparent 50%)",
-            "radial-gradient(circle at 20% 30%, rgba(107,60,255,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(0,200,150,0.1) 0%, transparent 50%)",
+            "radial-gradient(ellipse at 20% 30%, rgba(107,60,255,0.18) 0%, transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(0,200,150,0.12) 0%, transparent 55%)",
+            "radial-gradient(ellipse at 70% 20%, rgba(107,60,255,0.12) 0%, transparent 55%), radial-gradient(ellipse at 30% 80%, rgba(0,200,150,0.18) 0%, transparent 55%)",
+            "radial-gradient(ellipse at 20% 30%, rgba(107,60,255,0.18) 0%, transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(0,200,150,0.12) 0%, transparent 55%)",
           ]
         }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
       />
 
-      {/* 1. Deep Space Tech Grid (ENHANCED) */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      {/* 1. Perspective Grid Floor */}
+      <div className="absolute inset-0 flex items-end justify-center overflow-hidden">
         <div 
-          className="absolute w-[200vw] h-[200vh] opacity-[0.25]" 
+          className="absolute w-[250vw] h-[120vh] opacity-[0.12]" 
           style={{
             backgroundImage: `
-              linear-gradient(rgba(107,60,255,0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(107,60,255,0.3) 1px, transparent 1px)
+              linear-gradient(rgba(107,60,255,0.4) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(107,60,255,0.4) 1px, transparent 1px)
             `,
             backgroundSize: "80px 80px",
-            transform: "perspective(800px) rotateX(75deg) translateY(-100px) translateZ(-200px)",
-            maskImage: "radial-gradient(ellipse at center, black 10%, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse at center, black 10%, transparent 70%)"
+            transform: "perspective(600px) rotateX(75deg)",
+            transformOrigin: "bottom center",
+            maskImage: "linear-gradient(to top, black 0%, transparent 60%)",
+            WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 60%)"
           }}
         />
       </div>
       
-      {/* 2. Interactive Cursor Glow (EXISTING) */}
+      {/* 2. Mouse-tracking Glow */}
       <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full opacity-40 blur-[120px]"
+        className="absolute w-[500px] h-[500px] rounded-full opacity-30 blur-[100px]"
         style={{
-          background: "radial-gradient(circle, rgba(107,60,255,0.6) 0%, rgba(0,200,150,0.2) 50%, transparent 100%)",
+          background: "radial-gradient(circle, rgba(107,60,255,0.5) 0%, rgba(0,200,150,0.15) 50%, transparent 100%)",
         }}
         animate={{
-          x: mousePosition.x - 300,
-          y: mousePosition.y - 300,
+          x: mousePosition.x - 250,
+          y: mousePosition.y - 250,
         }}
         transition={{
           type: "spring",
-          damping: 40,
-          stiffness: 150,
-          mass: 0.5,
+          damping: 50,
+          stiffness: 120,
+          mass: 0.8,
         }}
       />
 
-      {/* 3. Floating Ambient Orbs (ENHANCED) */}
+      {/* 3. Ambient Orbs */}
       <motion.div 
         className="absolute rounded-full"
-        animate={{
-          y: [0, -80, 0],
-          x: [0, 50, 0],
-          scale: [1, 1.3, 1],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        style={{
-          width: "600px", height: "600px",
-          background: "rgba(107,60,255,0.15)",
-          top: "-20%", left: "-10%",
-          filter: "blur(140px)",
-        }}
+        animate={{ y: [0, -60, 0], x: [0, 40, 0], scale: [1, 1.2, 1] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        style={{ width: "500px", height: "500px", background: "rgba(107,60,255,0.12)", top: "-15%", left: "-8%", filter: "blur(130px)" }}
       />
-      
       <motion.div 
         className="absolute rounded-full"
-        animate={{
-          y: [0, 60, 0],
-          x: [0, -60, 0],
-          scale: [1, 1.4, 1],
-        }}
-        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        style={{
-          width: "500px", height: "500px",
-          background: "rgba(0,200,150,0.12)",
-          bottom: "-20%", right: "-10%",
-          filter: "blur(120px)",
-        }}
+        animate={{ y: [0, 50, 0], x: [0, -50, 0], scale: [1, 1.3, 1] }}
+        transition={{ duration: 28, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+        style={{ width: "400px", height: "400px", background: "rgba(0,200,150,0.10)", bottom: "-15%", right: "-8%", filter: "blur(110px)" }}
       />
 
-      {/* 4. ENHANCED: Cyberpunk 3D Hologram Globe */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 4. THE CYBERPUNK HOLOGRAM GLOBE — Full 3D Rotation      */}
+      {/* ═══════════════════════════════════════════════════════ */}
       <div 
-        className="absolute top-1/2 left-[80%] md:left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] mix-blend-screen pointer-events-none flex items-center justify-center opacity-40 md:opacity-80" 
-        style={{ perspective: "1500px" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] pointer-events-none flex items-center justify-center opacity-[0.35]" 
+        style={{ perspective: "1600px" }}
       >
+        {/* Spinning Globe Sphere */}
         <motion.div 
-          className="w-[450px] h-[450px] relative"
+          className="w-[480px] h-[480px] relative"
           style={{ transformStyle: "preserve-3d" }}
           animate={{ rotateX: [0, 360], rotateY: [0, 360] }}
-          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
         >
-          {/* Latitudes (Green) with Glowing Nodes */}
-          {[...Array(6)].map((_, i) => (
+          {/* Latitudes (Green Rings) — with glowing intersection nodes */}
+          {[...Array(8)].map((_, i) => (
             <div 
               key={`lat-${i}`}
-              className="absolute inset-0 rounded-full border-[1.5px] border-[#00C896] shadow-[0_0_20px_rgba(0,200,150,0.6)] opacity-70"
-              style={{ transform: `rotateX(${i * (180 / 6)}deg)` }}
+              className="absolute inset-0 rounded-full"
+              style={{ 
+                transform: `rotateX(${i * (180 / 8)}deg)`,
+                border: `1.5px solid rgba(0,200,150,${0.35 + (i % 3) * 0.15})`,
+                boxShadow: `0 0 12px rgba(0,200,150,0.3), inset 0 0 12px rgba(0,200,150,0.05)`,
+              }}
             >
-              <div className="absolute top-0 left-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_white] -translate-x-1/2 -translate-y-1/2" />
+              {/* Node dot at top of each ring */}
+              <div className="absolute top-0 left-1/2 w-[4px] h-[4px] bg-[#00C896] rounded-full shadow-[0_0_10px_#00C896,0_0_20px_#00C896] -translate-x-1/2 -translate-y-1/2" />
+              {/* Node dot at bottom */}
+              <div className="absolute bottom-0 left-1/2 w-[3px] h-[3px] bg-[#00C896] rounded-full shadow-[0_0_8px_#00C896] -translate-x-1/2 translate-y-1/2" />
             </div>
           ))}
-          {/* Longitudes (Purple) */}
-          {[...Array(6)].map((_, i) => (
+
+          {/* Longitudes (Purple Rings) — with glowing intersection nodes */}
+          {[...Array(8)].map((_, i) => (
             <div 
               key={`lng-${i}`}
-              className="absolute inset-0 rounded-full border-[1.5px] border-[#6B3CFF] shadow-[0_0_20px_rgba(107,60,255,0.6)] opacity-70"
-              style={{ transform: `rotateY(${i * (180 / 6)}deg)` }}
+              className="absolute inset-0 rounded-full"
+              style={{ 
+                transform: `rotateY(${i * (180 / 8)}deg)`,
+                border: `1.5px solid rgba(107,60,255,${0.35 + (i % 3) * 0.15})`,
+                boxShadow: `0 0 12px rgba(107,60,255,0.3), inset 0 0 12px rgba(107,60,255,0.05)`,
+              }}
             >
-              <div className="absolute top-1/2 left-0 w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_white] -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute top-1/2 left-0 w-[4px] h-[4px] bg-[#6B3CFF] rounded-full shadow-[0_0_10px_#6B3CFF,0_0_20px_#6B3CFF] -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute top-1/2 right-0 w-[3px] h-[3px] bg-[#6B3CFF] rounded-full shadow-[0_0_8px_#6B3CFF] translate-x-1/2 -translate-y-1/2" />
             </div>
           ))}
           
-          {/* Pulsing Core Energy */}
+          {/* Pulsing Energy Core */}
           <motion.div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] bg-gradient-to-br from-[#6B3CFF] to-[#00C896] blur-[60px] rounded-full"
-            animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0.6, 0.3] }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[160px] h-[160px] rounded-full"
+            style={{ background: "radial-gradient(circle, rgba(107,60,255,0.6) 0%, rgba(0,200,150,0.3) 40%, transparent 70%)" }}
+            animate={{ scale: [1, 1.6, 1], opacity: [0.2, 0.5, 0.2] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
         </motion.div>
 
-        {/* Orbiting Data Rings (Faster, Thicker) */}
+        {/* ── Orbiting Ring 1: Amber, fast, tilted ── */}
         <motion.div
-          className="absolute w-[800px] h-[800px] rounded-full border-[3px] border-dotted border-[#F5A623] opacity-50"
-          style={{ transformStyle: "preserve-3d" }}
-          animate={{ rotateZ: 360, rotateX: [65, 85, 65], rotateY: [15, -15, 15] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        />
+          className="absolute w-[750px] h-[750px] rounded-full"
+          style={{ 
+            transformStyle: "preserve-3d",
+            border: "2px dashed rgba(245,166,35,0.45)",
+            boxShadow: "0 0 20px rgba(245,166,35,0.1)",
+          }}
+          animate={{ rotateZ: 360, rotateX: [60, 80, 60], rotateY: [10, -10, 10] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        >
+          {/* Orbiting particle on ring 1 */}
+          <motion.div 
+            className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[8px] h-[8px] rounded-full bg-[#F5A623] shadow-[0_0_12px_#F5A623,0_0_30px_rgba(245,166,35,0.5)]"
+          />
+        </motion.div>
+
+        {/* ── Orbiting Ring 2: Green, slow, opposite tilt ── */}
         <motion.div
-          className="absolute w-[950px] h-[950px] rounded-full border-[2px] border-dashed border-[#00C896] opacity-30 shadow-[0_0_30px_rgba(0,200,150,0.2)]"
-          style={{ transformStyle: "preserve-3d" }}
-          animate={{ rotateZ: -360, rotateX: [75, 55, 75], rotateY: [-25, 25, -25] }}
-          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-        />
+          className="absolute w-[900px] h-[900px] rounded-full"
+          style={{ 
+            transformStyle: "preserve-3d",
+            border: "1.5px dashed rgba(0,200,150,0.3)",
+            boxShadow: "0 0 25px rgba(0,200,150,0.08)",
+          }}
+          animate={{ rotateZ: -360, rotateX: [70, 50, 70], rotateY: [-20, 20, -20] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        >
+          <motion.div 
+            className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[6px] h-[6px] rounded-full bg-[#00C896] shadow-[0_0_10px_#00C896,0_0_25px_rgba(0,200,150,0.5)]"
+          />
+        </motion.div>
+
+        {/* ── Orbiting Ring 3: Purple, medium speed, steep tilt ── */}
+        <motion.div
+          className="absolute w-[620px] h-[620px] rounded-full"
+          style={{ 
+            transformStyle: "preserve-3d",
+            border: "1px solid rgba(107,60,255,0.25)",
+            boxShadow: "0 0 15px rgba(107,60,255,0.08)",
+          }}
+          animate={{ rotateZ: 360, rotateX: [80, 60, 80], rotateY: [30, -30, 30] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
+        >
+          <motion.div 
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-[5px] h-[5px] rounded-full bg-[#A98EFF] shadow-[0_0_8px_#A98EFF,0_0_20px_rgba(107,60,255,0.4)]"
+          />
+        </motion.div>
       </div>
 
-      {/* 5. NEW: Floating Glass 3D Cards / Elements */}
-      <motion.div 
-        className="absolute top-[20%] left-[10%] w-[140px] h-[180px] bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.1)] rounded-2xl backdrop-blur-md p-4 flex flex-col justify-between shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-        style={{ transformStyle: "preserve-3d" }}
-        animate={{ y: [0, -40, 0], rotateX: [10, -10, 10], rotateY: [15, -15, 15] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <div className="flex justify-between items-start">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B3CFF] to-[#00C896] shadow-[0_0_15px_rgba(0,200,150,0.5)]" />
-          <span className="text-[10px] font-mono text-[#00C896]">LOCKED</span>
-        </div>
-        <div className="space-y-2">
-          <div className="w-full h-2 bg-[rgba(255,255,255,0.1)] rounded-full" />
-          <div className="w-2/3 h-2 bg-[rgba(255,255,255,0.1)] rounded-full" />
-        </div>
-      </motion.div>
-
-      <motion.div 
-        className="absolute bottom-[25%] right-[15%] w-[160px] h-[80px] bg-[rgba(255,255,255,0.02)] border border-[#F5A623] rounded-2xl backdrop-blur-md p-4 flex items-center gap-3 shadow-[0_0_30px_rgba(245,166,35,0.1)]"
-        style={{ transformStyle: "preserve-3d" }}
-        animate={{ y: [0, 30, 0], rotateX: [-15, 15, -15], rotateY: [-20, 20, -20] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      >
-        <div className="w-10 h-10 rounded-xl bg-[rgba(245,166,35,0.2)] flex items-center justify-center text-lg">⚖️</div>
-        <div>
-          <div className="w-16 h-2 bg-[rgba(255,255,255,0.2)] rounded-full mb-2" />
-          <div className="w-10 h-2 bg-[rgba(255,255,255,0.1)] rounded-full" />
-        </div>
-      </motion.div>
-
-      {/* 6. Floating Geometric Particles (EXISTING, slightly dimmed) */}
-      {[...Array(12)].map((_, i) => (
+      {/* 5. Tiny floating star particles */}
+      {[...Array(20)].map((_, i) => (
         <motion.div
-          key={`p-${i}`}
-          className="absolute rounded-full"
+          key={`star-${i}`}
+          className="absolute rounded-full bg-white"
           style={{
-            width: Math.random() * 4 + 2 + "px",
-            height: Math.random() * 4 + 2 + "px",
-            left: Math.random() * 100 + "%",
-            top: Math.random() * 100 + "%",
-            background: "rgba(255,255,255,0.4)",
-            boxShadow: "0 0 10px rgba(255,255,255,0.8)"
+            width: `${1 + Math.random() * 2.5}px`,
+            height: `${1 + Math.random() * 2.5}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            boxShadow: "0 0 6px rgba(255,255,255,0.6)"
           }}
           animate={{
-            y: [0, Math.random() * -200 - 100],
-            x: [0, (Math.random() - 0.5) * 100],
             opacity: [0, 0.8, 0],
+            y: [0, -(60 + Math.random() * 140)],
           }}
           transition={{
-            duration: Math.random() * 10 + 10,
+            duration: 8 + Math.random() * 12,
             repeat: Infinity,
             ease: "linear",
-            delay: Math.random() * 5,
+            delay: Math.random() * 8,
           }}
         />
       ))}

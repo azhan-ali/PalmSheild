@@ -1,11 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import toast from "react-hot-toast";
 
 export default function BrowseProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -17,9 +15,8 @@ export default function BrowseProjectsPage() {
         const res = await fetch("/api/projects");
         const data = await res.json();
         setProjects(data);
-      } catch (err: any) {
+      } catch (err) {
         console.error(err);
-        toast.error("Failed to load projects");
       } finally {
         setLoading(false);
       }
@@ -29,16 +26,16 @@ export default function BrowseProjectsPage() {
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-6">
-      <div className="mb-10 text-center max-w-2xl mx-auto">
-        <Badge variant="pill" className="mb-4">Freelancer Portal</Badge>
-        <h1 className="text-4xl font-bold font-sans tracking-[-1px] mb-4">Find Work. <span className="grad-text">Stay Protected.</span></h1>
-        <p className="text-text-secondary">Browse open escrow projects. When you accept a project, funds are already locked in a smart contract.</p>
+      <div className="mb-12 text-center max-w-2xl mx-auto">
+        <Badge variant="pill" className="mb-5">Freelancer Portal</Badge>
+        <h1 className="text-[40px] font-bold tracking-[-1.5px] mb-4">Find Work. <span className="grad-text">Stay Protected.</span></h1>
+        <p className="text-text-secondary text-[16px] leading-relaxed">Browse open escrow projects. When you accept, funds are already locked in a smart contract.</p>
       </div>
 
       {loading ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="h-48 bg-[rgba(255,255,255,0.03)] rounded-2xl animate-pulse"></div>
+            <div key={i} className="h-52 bg-[rgba(255,255,255,0.03)] rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : projects.length === 0 ? (
@@ -48,12 +45,12 @@ export default function BrowseProjectsPage() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project: any) => (
-            <Card key={project.id} className="flex flex-col">
+            <Card key={project.id} className="flex flex-col group">
               <div className="flex justify-between items-start mb-4">
                 <Badge variant="locked">PUSD Locked</Badge>
                 <span className="text-[12px] text-text-muted">{project.category}</span>
               </div>
-              <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+              <h3 className="text-xl font-bold mb-2 group-hover:text-white transition-colors">{project.title}</h3>
               <p className="text-sm text-text-secondary mb-6 line-clamp-2 flex-grow">
                 {project.description}
               </p>
@@ -63,9 +60,7 @@ export default function BrowseProjectsPage() {
                   <span className="text-[11px] text-text-muted uppercase tracking-wider font-mono">Budget</span>
                   <span className="font-bold text-[#00C896] font-mono">{project.totalBudget} PUSD</span>
                 </div>
-                <Button variant="secondary" size="sm" asChild>
-                  <Link href={`/projects/${project.id}`}>View Project</Link>
-                </Button>
+                <Button variant="secondary" size="sm" href={`/projects/${project.id}`}>View →</Button>
               </div>
             </Card>
           ))}

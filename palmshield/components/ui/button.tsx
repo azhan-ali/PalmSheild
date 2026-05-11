@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-[10px] text-[14px] font-semibold transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none font-sans",
+  "inline-flex items-center justify-center rounded-[10px] text-[14px] font-semibold transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none font-sans cursor-pointer",
   {
     variants: {
       variant: {
@@ -17,7 +18,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "px-[24px] py-[11px]",
-        sm: "h-9 px-3",
+        sm: "h-9 px-3 text-[13px]",
         lg: "h-11 px-8 text-[15px]",
         icon: "h-10 w-10",
       },
@@ -32,17 +33,47 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
+  href?: string;
   asChild?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, href, asChild, children, ...props }, ref) => {
+    // If href is provided or asChild with a Link child, render as a link
+    if (href) {
+      return (
+        <Link
+          href={href}
+          className={buttonVariants({ variant, size, className })}
+        >
+          {children}
+        </Link>
+      );
+    }
+
+    // If asChild, try to extract href from Link children
+    if (asChild && React.isValidElement(children)) {
+      const child = children as React.ReactElement<any>;
+      if (child.props.href) {
+        return (
+          <Link
+            href={child.props.href}
+            className={buttonVariants({ variant, size, className })}
+          >
+            {child.props.children}
+          </Link>
+        );
+      }
+    }
+
     return (
       <button
         className={buttonVariants({ variant, size, className })}
         ref={ref}
         {...props}
-      />
+      >
+        {children}
+      </button>
     );
   }
 );

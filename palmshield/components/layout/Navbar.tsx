@@ -18,35 +18,42 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 h-[64px] bg-[rgba(8,11,20,0.8)] backdrop-blur-[20px] border-b border-border-default flex items-center justify-between px-6">
-      <Link href="/" className="flex items-center gap-2">
-        <span className="text-xl">🛡️</span>
-        <span className="font-sans font-bold text-[18px] text-text-primary">PalmShield</span>
+    <nav className="sticky top-0 z-50 h-[60px] bg-[rgba(3,4,8,0.7)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)] flex items-center justify-between px-6 md:px-10">
+      {/* Logo */}
+      <Link href="/" className="flex items-center gap-2.5 group">
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#6B3CFF] to-[#00C896] flex items-center justify-center shadow-[0_0_15px_rgba(107,60,255,0.3)] group-hover:shadow-[0_0_25px_rgba(107,60,255,0.5)] transition-shadow">
+          <span className="text-white text-sm font-bold">PS</span>
+        </div>
+        <span className="font-bold text-[17px] text-white tracking-[-0.5px]">PalmShield</span>
       </Link>
       
-      <div className="flex items-center gap-6">
-        <Link href="/projects/browse" className="text-[13px] text-text-secondary hover:text-text-primary transition-colors">
-          Browse Projects
+      {/* Navigation Links */}
+      <div className="hidden sm:flex items-center gap-1">
+        <Link href="/projects/browse" className="px-4 py-2 text-[13px] text-[rgba(240,238,230,0.5)] hover:text-white hover:bg-[rgba(255,255,255,0.04)] rounded-lg transition-all duration-200">
+          Browse
         </Link>
-        <Link href="/dashboard" className="text-[13px] text-text-secondary hover:text-text-primary transition-colors">
+        <Link href="/dashboard" className="px-4 py-2 text-[13px] text-[rgba(240,238,230,0.5)] hover:text-white hover:bg-[rgba(255,255,255,0.04)] rounded-lg transition-all duration-200">
           Dashboard
         </Link>
-        
-        <button 
-          onClick={handleConnect}
-          className="bg-gradient-to-br from-accent-purple to-[#4A20E0] rounded-[8px] px-[18px] py-[8px] font-sans font-medium text-[13px] text-white shadow-[0_0_20px_rgba(107,60,255,0.25)] hover:brightness-110 hover:-translate-y-[1px] active:translate-y-0 transition-all flex items-center gap-2"
-        >
-          {connected && publicKey ? (
-            <>
-              <div className="w-[6px] h-[6px] rounded-full bg-accent-green" />
-              <span className="font-mono">{publicKey.toBase58().slice(0, 4)}...{publicKey.toBase58().slice(-4)}</span>
-              <span className="opacity-70 ml-1">| 0 PUSD</span>
-            </>
-          ) : (
-            "Connect Wallet"
-          )}
-        </button>
+        <Link href="/projects/create" className="px-4 py-2 text-[13px] text-[rgba(240,238,230,0.5)] hover:text-white hover:bg-[rgba(255,255,255,0.04)] rounded-lg transition-all duration-200">
+          Create
+        </Link>
       </div>
+
+      {/* Wallet Button */}
+      <button 
+        onClick={handleConnect}
+        className="h-9 bg-gradient-to-r from-[#6B3CFF] to-[#4A20E0] rounded-lg px-5 font-medium text-[13px] text-white shadow-[0_0_20px_rgba(107,60,255,0.25)] hover:shadow-[0_0_30px_rgba(107,60,255,0.4)] hover:brightness-110 active:scale-[0.98] transition-all duration-200 flex items-center gap-2"
+      >
+        {connected && publicKey ? (
+          <>
+            <div className="w-[6px] h-[6px] rounded-full bg-[#00C896] shadow-[0_0_8px_rgba(0,200,150,0.6)]" />
+            <span className="font-mono text-[12px]">{publicKey.toBase58().slice(0, 4)}...{publicKey.toBase58().slice(-4)}</span>
+          </>
+        ) : (
+          "Connect Wallet"
+        )}
+      </button>
     </nav>
   );
 }
