@@ -62,3 +62,80 @@
   border-color: rgba(107, 60, 255, 0.6);
   box-shadow: 0 0 0 3px rgba(107, 60, 255, 0.12);
 }
+
+/* ============================================================
+   Solana Wallet Adapter Modal — PalmShield Theme Override
+   ============================================================ */
+
+/* Overlay backdrop */
+.wallet-adapter-modal-wrapper {
+  background: rgba(3, 4, 8, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* Modal container */
+.wallet-adapter-modal {
+  background: rgba(12, 13, 20, 0.97) !important;
+  border: 1px solid rgba(107, 60, 255, 0.25) !important;
+  border-radius: 20px !important;
+  box-shadow:
+    0 0 0 1px rgba(107, 60, 255, 0.1),
+    0 24px 80px rgba(0, 0, 0, 0.7),
+    0 0 60px rgba(107, 60, 255, 0.08) !important;
+}
+
+/* Title */
+.wallet-adapter-modal-title {
+  color: #F0EEE6 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+/* List of wallet buttons */
+.wallet-adapter-modal-list {
+  padding: 0 8px 8px !important;
+}
+
+/* Individual wallet button */
+.wallet-adapter-modal-list li > button,
+.wallet-adapter-button {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  color: #F0EEE6 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.wallet-adapter-modal-list li > button:hover,
+.wallet-adapter-button:hover {
+  background: rgba(107, 60, 255, 0.12) !important;
+  border-color: rgba(107, 60, 255, 0.4) !important;
+  box-shadow: 0 0 20px rgba(107, 60, 255, 0.15) !important;
+}
+
+/* Close (×) button */
+.wallet-adapter-modal-button-close {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-radius: 10px !important;
+  transition: background 0.2s ease !important;
+}
+.wallet-adapter-modal-button-close:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+.wallet-adapter-modal-button-close svg {
+  fill: #F0EEE6 !important;
+}
+
+/* "Get started" / collapse link */
+.wallet-adapter-modal-list-more {
+  color: rgba(107, 60, 255, 0.8) !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+.wallet-adapter-modal-list-more:hover {
+  color: #6B3CFF !important;
+}
+

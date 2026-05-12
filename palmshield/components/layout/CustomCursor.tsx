@@ -6,110 +6,163 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 export function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
-  
-  // Custom cursor position
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
-  
-  // Spring animation for smooth trailing
-  const springConfig = { damping: 25, stiffness: 400, mass: 0.5 };
+  const [trail, setTrail] = useState<{ x: number; y: number; id: number }[]>([]);
+
+  const cursorX = useMotionValue(-200);
+  const cursorY = useMotionValue(-200);
+
+  // Smooth spring follow
+  const springConfig = { damping: 28, stiffness: 500, mass: 0.4 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Hide default cursor
-    document.body.style.cursor = 'none';
-    
-    // Add cursor styles to all interactive elements
-    const styleElement = document.createElement('style');
-    styleElement.innerHTML = `
-      * { cursor: none !important; }
+    // Hide native cursor globally — but NOT inside the wallet modal
+    // so that modal buttons remain clickable
+    const style = document.createElement("style");
+    style.innerHTML = `
+      *:not(.wallet-adapter-modal-wrapper):not(.wallet-adapter-modal-wrapper *):not(.wallet-adapter-modal-overlay) {
+        cursor: none !important;
+      }
+      .wallet-adapter-modal-wrapper,
+      .wallet-adapter-modal-wrapper *,
+      .wallet-adapter-modal-overlay {
+        cursor: default !important;
+      }
     `;
-    document.head.appendChild(styleElement);
+    document.head.appendChild(style);
+
+    let trailId = 0;
+    let lastTrail = 0;
 
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
+
+      // Spawn trail particles every ~40ms
+      const now = Date.now();
+      if (now - lastTrail > 40) {
+        lastTrail = now;
+        const id = trailId++;
+        setTrail((prev) => [...prev.slice(-8), { x: e.clientX, y: e.clientY, id }]);
+      }
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isInteractive = 
-        target.tagName.toLowerCase() === 'a' ||
-        target.tagName.toLowerCase() === 'button' ||
-        target.closest('a') ||
-        target.closest('button') ||
-        target.closest('.palm-card');
-        
-      setIsHovering(!!isInteractive);
+    const handleOver = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      setIsHovering(
+        !!(t.tagName === "A" || t.tagName === "BUTTON" || t.closest("a") || t.closest("button") || t.closest(".palm-card"))
+      );
     };
 
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
+    const handleDown = () => setIsClicking(true);
+    const handleUp = () => setIsClicking(false);
 
     window.addEventListener("mousemove", moveCursor);
-    window.addEventListener("mouseover", handleMouseOver);
-    window.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseover", handleOver);
+    window.addEventListener("mousedown", handleDown);
+    window.addEventListener("mouseup", handleUp);
 
     return () => {
-      document.body.style.cursor = 'auto';
-      document.head.removeChild(styleElement);
+      document.head.removeChild(style);
       window.removeEventListener("mousemove", moveCursor);
-      window.removeEventListener("mouseover", handleMouseOver);
-      window.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseover", handleOver);
+      window.removeEventListener("mousedown", handleDown);
+      window.removeEventListener("mouseup", handleUp);
     };
   }, [cursorX, cursorY]);
 
-  // Main dot size
-  const dotSize = isClicking ? 6 : isHovering ? 4 : 8;
-  
-  // Outer ring size
-  const ringSize = isClicking ? 24 : isHovering ? 48 : 32;
-
   return (
     <>
-      {/* Outer Glow Ring */}
+      {/* ── Sparkle Trail ── */}
+      {trail.map((p, i) => {
+        const age = trail.length - 1 - i; // 0 = newest
+        const opacity = (1 - age / trail.length) * 0.55;
+        const size = isHovering ? 5 - age * 0.4 : 3 - age * 0.25;
+        return (
+          <motion.div
+            key={p.id}
+            className="fixed top-0 left-0 rounded-full pointer-events-none z-[9995]"
+            style={{
+              width: Math.max(size, 1),
+              height: Math.max(size, 1),
+              x: p.x,
+              y: p.y,
+              translateX: "-50%",
+              translateY: "-50%",
+              opacity,
+              backgroundColor: isHovering ? "#F5A623" : "#6B3CFF",
+              boxShadow: isHovering
+                ? `0 0 6px rgba(245,166,35,${opacity})`
+                : `0 0 6px rgba(107,60,255,${opacity})`,
+            }}
+            initial={{ scale: 1, opacity }}
+            animate={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
+        );
+      })}
+
+      {/* ── Outer Orbit Ring ── */}
       <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[9999] flex items-center justify-center mix-blend-screen"
+        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full"
         style={{
-          width: ringSize,
-          height: ringSize,
           x: cursorXSpring,
           y: cursorYSpring,
           translateX: "-50%",
           translateY: "-50%",
-          border: isHovering ? "1px solid rgba(0, 200, 150, 0.8)" : "1px solid rgba(107, 60, 255, 0.4)",
-          backgroundColor: isHovering ? "rgba(0, 200, 150, 0.05)" : "transparent",
-          boxShadow: isHovering ? "0 0 15px rgba(0, 200, 150, 0.4)" : "0 0 10px rgba(107, 60, 255, 0.2)",
         }}
         animate={{
-          width: ringSize,
-          height: ringSize,
+          width: isClicking ? 28 : isHovering ? 52 : 38,
+          height: isClicking ? 28 : isHovering ? 52 : 38,
+          borderColor: isHovering ? "rgba(245,166,35,0.7)" : "rgba(107,60,255,0.55)",
+          boxShadow: isHovering
+            ? "0 0 18px rgba(245,166,35,0.4), 0 0 6px rgba(245,166,35,0.6)"
+            : "0 0 14px rgba(107,60,255,0.35), 0 0 5px rgba(107,60,255,0.5)",
+          rotate: isHovering ? 360 : 0,
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      />
-      
-      {/* Inner Dot */}
+        transition={{ type: "spring", stiffness: 280, damping: 22, rotate: { duration: 0.6, ease: "easeInOut" } }}
+      >
+        {/* Dashed orbit ring */}
+        <motion.div
+          className="w-full h-full rounded-full"
+          style={{
+            border: isHovering ? "1.5px dashed rgba(245,166,35,0.7)" : "1.5px dashed rgba(107,60,255,0.55)",
+            boxShadow: isHovering
+              ? "0 0 18px rgba(245,166,35,0.4)"
+              : "0 0 14px rgba(107,60,255,0.35)",
+          }}
+          animate={{ rotate: isHovering ? [0, 360] : 0 }}
+          transition={{ duration: 1.4, repeat: isHovering ? Infinity : 0, ease: "linear" }}
+        />
+      </motion.div>
+
+      {/* ── Core Cursor Icon ── */}
       <motion.div
-        className="fixed top-0 left-0 rounded-full pointer-events-none z-[10000]"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] select-none flex items-center justify-center"
         style={{
-          width: dotSize,
-          height: dotSize,
           x: cursorX,
           y: cursorY,
           translateX: "-50%",
           translateY: "-50%",
-          backgroundColor: isHovering ? "#00C896" : "#6B3CFF",
-          boxShadow: isHovering ? "0 0 8px #00C896" : "0 0 8px #6B3CFF",
+          fontSize: isHovering ? "18px" : "15px",
+          lineHeight: 1,
+          filter: isHovering
+            ? "drop-shadow(0 0 8px rgba(245,166,35,0.9)) drop-shadow(0 0 16px rgba(245,166,35,0.5))"
+            : "drop-shadow(0 0 8px rgba(107,60,255,0.9)) drop-shadow(0 0 16px rgba(107,60,255,0.5))",
         }}
         animate={{
-          width: dotSize,
-          height: dotSize,
+          scale: isClicking ? 0.7 : 1,
+          rotateY: isHovering ? [0, 360] : 0,
         }}
-        transition={{ type: "spring", stiffness: 500, damping: 25 }}
-      />
+        transition={{
+          scale: { type: "spring", stiffness: 600, damping: 20 },
+          rotateY: { duration: 0.5, ease: "easeInOut" },
+        }}
+      >
+        {/* Shield when normal, Coin when hovering a link/button */}
+        {isHovering ? "💰" : "🛡️"}
+      </motion.div>
     </>
   );
 }
